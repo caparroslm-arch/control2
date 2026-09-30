@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Control de Asistencia - Informática Avanzada</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React 18 & ReactDOM -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+
+  <!-- Babel Standalone para interpretar JSX en cliente -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    // Iconos SVG Integrados (Reemplazo ligero de lucide-react)
+    const IconWrapper = ({ children, size = 20, className = "" }) => (
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        width={size} 
+        height={size} 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round" 
+        className={className}
+      >
+        {children}
+      </svg>
+    );
+
+    const Users = (props) => (
+      <IconWrapper {...props}>
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </IconWrapper>
+    );
+
+    const UserCheck = (props) => (
+      <IconWrapper {...props}>
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/>
+      </IconWrapper>
+    );
+
+    const CalendarDays = (props) => (
+      <IconWrapper {...props}>
+        <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/>
+      </IconWrapper>
+    );
+
+    const BarChart3 = (props) => (
+      <IconWrapper {...props}>
+        <path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>
+      </IconWrapper>
+    );
+
+    const PlusCircle = (props) => (
+      <IconWrapper {...props}>
+        <circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/>
+      </IconWrapper>
+    );
+
+    const LogOut = (props) => (
+      <IconWrapper {...props}>
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/>
+      </IconWrapper>
+    );
+
+    const CheckCircle2 = (props) => (
+      <IconWrapper {...props}>
+        <circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>
+      </IconWrapper>
+    );
+
+    const XCircle = (props) => (
+      <IconWrapper {...props}>
+        <circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>
+      </IconWrapper>
+    );
+
+    const CalendarIcon = (props) => (
+      <IconWrapper {...props}>
+        <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/>
+      </IconWrapper>
+    );
+
+    const ChevronRight = (props) => (
+      <IconWrapper {...props}>
+        <path d="m9 18 6-6-6-6"/>
+      </IconWrapper>
+    );
+
+    const User = (props) => (
+      <IconWrapper {...props}>
+        <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+      </IconWrapper>
+    );
+
+    const UserPlus = (props) => (
+      <IconWrapper {...props}>
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/>
+      </IconWrapper>
+    );
+
+    const Lock = (props) => (
+      <IconWrapper {...props}>
+        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </IconWrapper>
+    );
+
+    const AlertTriangle = (props) => (
+      <IconWrapper {...props}>
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/>
+      </IconWrapper>
+    );
+
+    const TrendingUp = (props) => (
+      <IconWrapper {...props}>
+        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>
+      </IconWrapper>
+    );
+
+    const UserX = (props) => (
+      <IconWrapper {...props}>
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" x2="22" y1="8" y2="13"/><line x1="22" x2="17" y1="8" y2="13"/>
+      </IconWrapper>
+    );
+
+    const Award = (props) => (
+      <IconWrapper {...props}>
+        <circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
+      </IconWrapper>
+    );
+
+    const Trash2 = (props) => (
+      <IconWrapper {...props}>
+        <path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/>
+      </IconWrapper>
+    );
+
+    const mockStudents = [
+      { id: 's1', name: 'Ana García', email: 'ana.garcia@ejemplo.com' },
+      { id: 's2', name: 'Carlos López', email: 'carlos.lopez@ejemplo.com' },
+      { id: 's3', name: 'María Fernández', email: 'maria.f@ejemplo.com' },
+      { id: 's4', name: 'Juan Martínez', email: 'juan.m@ejemplo.com' },
+      { id: 's5', name: 'Laura Gómez', email: 'laura.gomez@ejemplo.com' },
+    ];
+
+    const mockSessions = [
+      { id: 'sess-1', date: '2026-09-25', title: 'Taller de Programación' },
+      { id: 'sess-2', date: '2026-09-26', title: 'Revisión de Proyectos' },
+    ];
+
+    const mockAttendances = {
+      'sess-1': { 's1': 'present', 's2': 'present', 's3': 'absent', 's4': 'present', 's5': 'present' },
+      'sess-2': { 's1': 'present', 's3': 'present' }
+    };
+
+    function AsistenciaApp() {
+      const [students, setStudents] = React.useState(mockStudents);
+      const [sessions, setSessions] = React.useState(mockSessions);
+      const [attendances, setAttendances] = React.useState(mockAttendances);
+
+      const [currentRole, setCurrentRole] = React.useState(null);
+      const [currentStudentId, setCurrentStudentId] = React.useState(null);
+      const [teacherTab, setTeacherTab] = React.useState('sessions');
+      const [toastMessage, setToastMessage] = React.useState(null);
+      const [showTeacherAuth, setShowTeacherAuth] = React.useState(false);
+      const [teacherPassword, setTeacherPassword] = React.useState('');
+      const [authError, setAuthError] = React.useState(false);
+      const [studentToDelete, setStudentToDelete] = React.useState(null);
+      
+      const TEACHER_CODE = '1234';
+
+      const showToast = (message) => {
+        setToastMessage(message);
+        setTimeout(() => setToastMessage(null), 3000);
+      };
+
+      const handleDeleteStudent = (id) => {
+        setStudents(prev => prev.filter(s => s.id !== id));
+        showToast('Alumno eliminado correctamente');
+        setStudentToDelete(null);
+      };
+
+      const handleCreateSession = (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const date = formData.get('date');
+        const title = formData.get('title');
+
+        if (!date || !title) return;
+
+        const newSession = {
+          id: `sess-${Date.now()}`,
+          date,
+          title
+        };
+
+        setSessions([newSession, ...sessions].sort((a, b) => new Date(b.date) - new Date(a.date)));
+        setAttendances({ ...attendances, [newSession.id]: {} });
+        showToast('Sesión creada exitosamente');
+        e.target.reset();
+      };
+
+      const handleAddStudent = (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const name = formData.get('name');
+
+        if (!name) return;
+
+        const newStudent = {
+          id: `s-${Date.now()}`,
+          name
+        };
+
+        setStudents([...students, newStudent]);
+        showToast('Alumno registrado exitosamente');
+        e.target.reset();
+      };
+
+      const handleRegisterAttendance = (sessionId, studentId) => {
+        setAttendances(prev => {
+          const sessionData = prev[sessionId] || {};
+          return {
+            ...prev,
+            [sessionId]: {
+              ...sessionData,
+              [studentId]: 'present'
+            }
+          };
+        });
+        showToast('¡Asistencia registrada correctamente!');
+      };
+
+      const handleCancelAttendance = (sessionId, studentId) => {
+        setAttendances(prev => {
+          const sessionData = { ...(prev[sessionId] || {}) };
+          delete sessionData[studentId];
+          return {
+            ...prev,
+            [sessionId]: sessionData
+          };
+        });
+        showToast('Asistencia anulada correctamente');
+      };
+
+      const balanceData = React.useMemo(() => {
+        const monthlyStats = {};
+
+        sessions.forEach(session => {
+          const date = new Date(session.date);
+          const monthYear = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+          
+          if (!monthlyStats[monthYear]) {
+            monthlyStats[monthYear] = {
+              label: date.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }),
+              totalSessions: 0,
+              sessions: [],
+              studentRecords: {}
+            };
+          }
+          
+          monthlyStats[monthYear].totalSessions += 1;
+          monthlyStats[monthYear].sessions.push(session.id);
+        });
+
+        Object.keys(monthlyStats).forEach(monthKey => {
+          const monthData = monthlyStats[monthKey];
+          
+          students.forEach(student => {
+            let presentCount = 0;
+            let absentCount = 0;
+
+            monthData.sessions.forEach(sessionId => {
+              const status = attendances[sessionId]?.[student.id];
+              if (status === 'present') presentCount++;
+              else absentCount++;
+            });
+
+            monthData.studentRecords[student.id] = {
+              student,
+              present: presentCount,
+              absent: absentCount,
+              percentage: monthData.totalSessions > 0 
+                ? Math.round((presentCount / monthData.totalSessions) * 100) 
+                : 0
+            };
+          });
+        });
+
+        return Object.entries(monthlyStats).sort((a, b) => b[0].localeCompare(a[0]));
+      }, [sessions, attendances, students]);
+
+      const overallStats = React.useMemo(() => {
+        const totalSessions = sessions.length;
+        if (totalSessions === 0 || students.length === 0) {
+          return { regularCount: 0, noAbsencesCount: 0, neverAttendedCount: 0, totalStudents: students.length };
+        }
+
+        let regularCount = 0;
+        let noAbsencesCount = 0;
+        let neverAttendedCount = 0;
+
+        students.forEach(student => {
+          let presents = 0;
+          sessions.forEach(session => {
+            if (attendances[session.id]?.[student.id] === 'present') {
+              presents++;
+            }
+          });
+          const absents = totalSessions - presents;
+          const percentage = (presents / totalSessions) * 100;
+
+          if (percentage >= 80) regularCount++;
+          if (absents === 0) noAbsencesCount++;
+          if (presents === 0) neverAttendedCount++;
+        });
+
+        return { regularCount, noAbsencesCount, neverAttendedCount, totalStudents: students.length };
+      }, [sessions, attendances, students]);
+
+      if (!currentRole) {
+        if (showTeacherAuth) {
+          return (
+            <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
+              <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100 p-6">
+                <button 
+                  onClick={() => {
+                    setShowTeacherAuth(false);
+                    setAuthError(false);
+                    setTeacherPassword('');
+                  }} 
+                  className="text-sm text-slate-500 mb-6 flex items-center gap-1 hover:text-emerald-600 transition-colors"
+                >
+                  <LogOut size={16} /> Volver
+                </button>
+                
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mb-4">
+                    <Lock size={32} />
+                  </div>
+                  <h2 className="text-xl font-bold text-slate-800">Acceso de Profesor</h2>
+                  <p className="text-sm text-slate-500 mt-1">Introduce el código de seguridad para continuar</p>
+                </div>
+
+                <form 
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    if (teacherPassword === TEACHER_CODE) {
+                      setCurrentRole('teacher');
+                      setShowTeacherAuth(false);
+                      setTeacherPassword('');
+                      setAuthError(false);
+                    } else {
+                      setAuthError(true);
+                    }
+                  }}
+                  className="space-y-4"
+                >
+                  <div>
+                    <input
+                      type="password"
+                      value={teacherPassword}
+                      onChange={(e) => {
+                        setTeacherPassword(e.target.value);
+                        setAuthError(false);
+                      }}
+                      placeholder="Código de acceso"
+                      className={`w-full p-4 text-center text-2xl tracking-[0.5em] font-mono border-2 rounded-xl outline-none transition-all ${
+                        authError ? 'border-red-300 focus:border-red-500 bg-red-50 text-red-700' : 'border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 text-slate-700'
+                      }`}
+                      autoFocus
+                    />
+                    {authError && (
+                      <p className="text-red-500 text-sm text-center mt-2 font-medium">Código incorrecto. Inténtalo de nuevo.</p>
+                    )}
+                  </div>
+                  <button 
+                    type="submit"
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold p-4 rounded-xl transition-colors"
+                  >
+                    Acceder al Panel
+                  </button>
+                </form>
+              </div>
+            </div>
+          );
+        }
+
+        return (
+          <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
+            <div className="max-w-md w-full bg-white rounded-2xl shadow-xl overflow-hidden">
+              <div className="bg-indigo-600 p-6 text-center">
+                <h1 className="text-2xl font-bold text-white mb-1">Control de Asistencia</h1>
+                <p className="text-indigo-100 text-sm font-medium">Informática Avanzada 26/27</p>
+                <div className="mt-5">
+                  <span className="inline-block bg-indigo-900/60 text-indigo-100 text-xs font-semibold px-4 py-2 rounded-xl border border-indigo-400/30 shadow-inner">
+                    Selecciona tu perfil para continuar
+                  </span>
+                </div>
+              </div>
+              
+              <div className="p-6 space-y-4">
+                <button 
+                  onClick={() => setCurrentRole('student')}
+                  className="w-full flex items-center justify-between p-4 border-2 border-slate-100 rounded-xl hover:border-indigo-500 hover:bg-indigo-50 transition-all group"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="bg-indigo-100 p-3 rounded-lg text-indigo-600 group-hover:bg-indigo-500 group-hover:text-white transition-colors">
+                      <User size={24} />
+                    </div>
+                    <div className="text-left">
+                      <h3 className="font-semibold text-slate-800">Soy Alumno</h3>
+                      <p className="text-sm text-slate-500">Registrar mi asistencia</p>
+                    </div>
+                  </div>
+                  <ChevronRight className="text-slate-400 group-hover:text-indigo-500" />
+                </button>
+
+                <button 
+                  onClick={() => setShowTeacherAuth(true)}
+                  className="w-full flex items-center justify-between p-4 border-2 border-slate-100 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 transition-all group"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="bg-emerald-100 p-3 rounded-lg text-emerald-600 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                      <Users size={24} />
+                    </div>
+                    <div className="text-left">
+                      <h3 className="font-semibold text-slate-800">Soy Profesor</h3>
+                      <p className="text-sm text-slate-500">Gestionar sesiones y reportes</p>
+                    </div>
+                  </div>
+                  <ChevronRight className="text-slate-400 group-hover:text-emerald-500" />
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      if (currentRole === 'student') {
+        if (!currentStudentId) {
+          const sortedStudents = [...students].sort((a, b) => 
+            a.name.localeCompare(b.name, 'es', { sensitivity: 'base' })
+          );
+
+          return (
+            <div className="min-h-screen bg-slate-50 flex flex-col p-4 sm:p-6">
+              <div className="max-w-md w-full mx-auto bg-white rounded-2xl shadow-sm p-6 mt-10 border border-slate-100">
+                <button onClick={() => setCurrentRole(null)} className="text-sm text-slate-500 mb-6 flex items-center gap-1 hover:text-indigo-600">
+                  <LogOut size={16} /> Volver
+                </button>
+                <h2 className="text-xl font-bold text-slate-800 mb-6 text-center">¿Quién eres?</h2>
+                <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-2">
+                  {sortedStudents.map(student => (
+                    <button
+                      key={student.id}
+                      onClick={() => setCurrentStudentId(student.id)}
+                      className="w-full p-4 text-left border rounded-xl hover:border-indigo-500 hover:bg-indigo-50 transition-colors font-medium text-slate-700"
+                    >
+                      {student.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        const currentStudent = students.find(s => s.id === currentStudentId);
+        
+        return (
+          <div className="min-h-screen bg-slate-50 pb-20">
+            <header className="bg-indigo-600 text-white p-6 rounded-b-[2rem] shadow-md">
+              <div className="flex justify-between items-start max-w-lg mx-auto">
+                <div>
+                  <p className="text-indigo-200 text-sm mb-1">Hola,</p>
+                  <h1 className="text-2xl font-bold">{currentStudent.name}</h1>
+                </div>
+                <button 
+                  onClick={() => { setCurrentStudentId(null); setCurrentRole(null); }}
+                  className="p-2 bg-indigo-500/50 rounded-full hover:bg-indigo-500 transition-colors"
+                >
+                  <LogOut size={20} />
+                </button>
+              </div>
+            </header>
+
+            <main className="max-w-lg mx-auto p-4 mt-4 space-y-6">
+              <h2 className="text-lg font-semibold text-slate-700 flex items-center gap-2">
+                <CalendarIcon size={20} className="text-indigo-500"/> Sesiones de Hoy
+              </h2>
+              
+              {(() => {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                const day = String(today.getDate()).padStart(2, '0');
+                const todayString = `${year}-${month}-${day}`;
+                
+                const todaySessions = sessions.filter(session => session.date === todayString);
+
+                if (todaySessions.length === 0) {
+                  return (
+                    <div className="text-center p-8 bg-white rounded-2xl shadow-sm border border-slate-100 mt-6">
+                      <CalendarDays size={48} className="mx-auto mb-4 text-slate-300" />
+                      <p className="text-slate-500 font-medium">No hay sesiones programadas para hoy.</p>
+                    </div>
+                  );
+                }
+
+                return todaySessions.map(session => {
+                  const isPresent = attendances[session.id]?.[currentStudentId] === 'present';
+                  const sessionDate = new Date(session.date).toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                  
+                  return (
+                    <div key={session.id} className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col gap-4">
+                      <div>
+                        <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 block mb-1">
+                          {sessionDate}
+                        </span>
+                        <h3 className="text-lg font-bold text-slate-800">{session.title}</h3>
+                      </div>
+                      
+                      {isPresent ? (
+                        <div className="flex flex-col gap-2">
+                          <div className="bg-emerald-50 text-emerald-600 p-4 rounded-xl flex items-center justify-center gap-2 font-semibold">
+                            <CheckCircle2 size={24} /> Asistencia Registrada
+                          </div>
+                          <button 
+                            onClick={() => handleCancelAttendance(session.id, currentStudentId)}
+                            className="text-xs text-slate-500 hover:text-red-600 flex items-center justify-center gap-1 py-1.5 px-3 rounded-lg hover:bg-red-50 transition-colors self-center font-medium"
+                          >
+                            <XCircle size={14} className="text-red-500" /> ¿Te equivocaste de alumno? Anular registro
+                          </button>
+                        </div>
+                      ) : (
+                        <button 
+                          onClick={() => handleRegisterAttendance(session.id, currentStudentId)}
+                          className="bg-indigo-600 hover:bg-indigo-700 text-white p-4 rounded-xl flex items-center justify-center gap-2 font-semibold transition-colors active:scale-95"
+                        >
+                          <UserCheck size={24} /> Registrar mi Asistencia
+                        </button>
+                      )}
+                    </div>
+                  );
+                });
+              })()}
+            </main>
+            
+            {toastMessage && (
+              <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-lg z-50 flex items-center gap-2">
+                <CheckCircle2 size={20} className="text-emerald-400" />
+                <span className="font-medium text-sm">{toastMessage}</span>
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      return (
+        <div className="min-h-screen bg-slate-50 flex flex-col">
+          <header className="bg-emerald-700 text-white px-4 py-4 shadow-md sticky top-0 z-10">
+            <div className="max-w-4xl mx-auto flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <div className="bg-emerald-600 p-2 rounded-lg">
+                  <Users size={24} />
+                </div>
+                <h1 className="text-xl font-bold hidden sm:block">Panel del Profesor</h1>
+              </div>
+              <button 
+                onClick={() => setCurrentRole(null)}
+                className="flex items-center gap-2 text-emerald-100 hover:text-white px-3 py-2 rounded-lg hover:bg-emerald-600 transition-colors text-sm font-medium"
+              >
+                <LogOut size={18} /> Salir
+              </button>
+            </div>
+          </header>
+
+          <div className="bg-white border-b border-slate-200 sticky top-[72px] z-10">
+            <div className="max-w-4xl mx-auto flex">
+              <button 
+                onClick={() => setTeacherTab('sessions')}
+                className={`flex-1 flex items-center justify-center gap-2 py-4 font-medium text-sm border-b-2 transition-colors ${teacherTab === 'sessions' ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'}`}
+              >
+                <CalendarDays size={18} /> Gestión de Sesiones
+              </button>
+              <button 
+                onClick={() => setTeacherTab('balance')}
+                className={`flex-1 flex items-center justify-center gap-2 py-4 font-medium text-sm border-b-2 transition-colors ${teacherTab === 'balance' ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'}`}
+              >
+                <BarChart3 size={18} /> Balance Mensual
+              </button>
+              <button 
+                onClick={() => setTeacherTab('students')}
+                className={`flex-1 flex items-center justify-center gap-2 py-4 font-medium text-sm border-b-2 transition-colors ${teacherTab === 'students' ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50'}`}
+              >
+                <UserPlus size={18} /> Alumnado
+              </button>
+            </div>
+          </div>
+
+          <main className="flex-1 max-w-4xl w-full mx-auto p-4 py-6">
+            {teacherTab === 'sessions' && (
+              <div className="space-y-6">
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                  <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <PlusCircle size={20} className="text-emerald-500" /> Crear Nueva Sesión
+                  </h2>
+                  <form onSubmit={handleCreateSession} className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex-1">
+                      <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Fecha</label>
+                      <input 
+                        type="date" 
+                        name="date"
+                        required
+                        defaultValue={new Date().toISOString().split('T')[0]}
+                        className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
+                      />
+                    </div>
+                    <div className="flex-[2]">
+                      <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Título / Descripción</label>
+                      <input 
+                        type="text" 
+                        name="title"
+                        required
+                        placeholder="Ej. Clase de Programación"
+                        className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
+                      />
+                    </div>
+                    <div className="flex items-end">
+                      <button type="submit" className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors">
+                        Crear Sesión
+                      </button>
+                    </div>
+                  </form>
+                </div>
+
+                {(() => {
+                  const todayStr = new Date().toISOString().split('T')[0];
+                  const currentSession = sessions.find(s => s.date === todayStr) || sessions[0];
+
+                  return (
+                    <div className="space-y-6">
+                      {currentSession ? (
+                        (() => {
+                          const presentStudents = students.filter(student => attendances[currentSession.id]?.[student.id] === 'present');
+                          const isToday = currentSession.date === todayStr;
+
+                          return (
+                            <div className="bg-emerald-50/60 border-2 border-emerald-500/30 p-6 rounded-2xl shadow-sm">
+                              <div className="flex items-center justify-between mb-3">
+                                <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${isToday ? 'bg-emerald-600 text-white' : 'bg-slate-200 text-slate-700'}`}>
+                                  <CalendarDays size={14} />
+                                  {isToday ? 'Sesión Actual (Hoy)' : 'Última Sesión'}
+                                </span>
+                                <span className="text-xs font-semibold text-slate-500">
+                                  {new Date(currentSession.date).toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}
+                                </span>
+                              </div>
+
+                              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-emerald-100 pb-4 mb-4">
+                                <div>
+                                  <h3 className="text-xl font-extrabold text-slate-800">{currentSession.title}</h3>
+                                </div>
+                                <div className="bg-emerald-600 text-white px-4 py-2.5 rounded-xl flex items-center gap-3 shrink-0 self-start sm:self-auto shadow-sm">
+                                  <UserCheck size={22} />
+                                  <div>
+                                    <span className="text-2xl font-black leading-none block">{presentStudents.length}</span>
+                                    <span className="text-[0.65rem] uppercase font-semibold tracking-wider text-emerald-100">Presentes</span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div>
+                                <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Alumnado Presente</h4>
+                                {presentStudents.length > 0 ? (
+                                  <div className="flex flex-wrap gap-2">
+                                    {presentStudents.map(student => (
+                                      <span key={student.id} className="inline-flex items-center gap-1.5 text-sm bg-white text-slate-700 border border-emerald-200 pl-3 pr-1 py-1 rounded-lg shadow-xs font-medium">
+                                        <CheckCircle2 size={14} className="text-emerald-500" />
+                                        {student.name}
+                                        <button
+                                          onClick={() => handleCancelAttendance(currentSession.id, student.id)}
+                                          className="ml-1 p-0.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                                          title={`Anular asistencia de ${student.name}`}
+                                        >
+                                          <XCircle size={15} />
+                                        </button>
+                                      </span>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <p className="text-sm text-slate-400 italic">No hay registros de asistencia aún para esta sesión.</p>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })()
+                      ) : (
+                        <div className="p-6 text-center text-slate-500 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                          No hay sesiones creadas aún.
+                        </div>
+                      )}
+
+                      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div className="px-6 py-4 border-b border-slate-100 bg-slate-50">
+                          <h3 className="font-bold text-slate-800 text-sm uppercase tracking-wider">Histórico de Sesiones</h3>
+                        </div>
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-left border-collapse">
+                            <thead>
+                              <tr className="bg-white text-xs uppercase tracking-wider text-slate-500 border-b border-slate-100">
+                                <th className="px-6 py-4 font-semibold">Fecha</th>
+                                <th className="px-6 py-4 font-semibold">Nombre de la Sesión</th>
+                                <th className="px-6 py-4 font-semibold text-right">Nº de Asistentes</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-50">
+                              {sessions.map(session => {
+                                const presentCount = students.filter(student => attendances[session.id]?.[student.id] === 'present').length;
+                                return (
+                                  <tr key={session.id} className="hover:bg-slate-50 transition-colors">
+                                    <td className="px-6 py-4 text-sm font-medium text-slate-600 whitespace-nowrap">
+                                      {new Date(session.date).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                                    </td>
+                                    <td className="px-6 py-4 text-sm font-semibold text-slate-800 whitespace-nowrap">
+                                      {session.title}
+                                    </td>
+                                    <td className="px-6 py-4 text-sm text-right whitespace-nowrap">
+                                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                        <CheckCircle2 size={14} className="text-emerald-600" />
+                                        {presentCount} presentes
+                                      </span>
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
+
+            {teacherTab === 'balance' && (
+              <div className="space-y-8">
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                  <h3 className="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <BarChart3 size={18} className="text-emerald-600" />
+                    Estadísticas de Asistencia Acumuladas
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-emerald-50 border border-emerald-100 p-4 rounded-xl flex items-center gap-4">
+                      <div className="bg-emerald-100 p-3 rounded-lg text-emerald-600 shrink-0">
+                        <TrendingUp size={24} />
+                      </div>
+                      <div>
+                        <span className="text-2xl font-black text-emerald-700">{overallStats.regularCount}</span>
+                        <p className="text-xs font-semibold text-emerald-800">Asistencia regular (≥80%)</p>
+                        <p className="text-[0.7rem] text-emerald-600 mt-0.5">
+                          {overallStats.totalStudents > 0 ? `${Math.round((overallStats.regularCount / overallStats.totalStudents) * 100)}% del total` : '0%'}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl flex items-center gap-4">
+                      <div className="bg-blue-100 p-3 rounded-lg text-blue-600 shrink-0">
+                        <Award size={24} />
+                      </div>
+                      <div>
+                        <span className="text-2xl font-black text-blue-700">{overallStats.noAbsencesCount}</span>
+                        <p className="text-xs font-semibold text-blue-800">Sin faltas anotadas</p>
+                        <p className="text-[0.7rem] text-blue-600 mt-0.5">100% de asistencia acumulada</p>
+                      </div>
+                    </div>
+
+                    <div className="bg-red-50 border border-red-100 p-4 rounded-xl flex items-center gap-4">
+                      <div className="bg-red-100 p-3 rounded-lg text-red-600 shrink-0">
+                        <UserX size={24} />
+                      </div>
+                      <div>
+                        <span className="text-2xl font-black text-red-700">{overallStats.neverAttendedCount}</span>
+                        <p className="text-xs font-semibold text-red-800">Nunca han asistido</p>
+                        <p className="text-[0.7rem] text-red-600 mt-0.5">0 asistencias registradas</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {balanceData.map(([monthKey, monthData]) => (
+                  <div key={monthKey} className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div className="bg-slate-50 px-6 py-4 border-b border-slate-100 flex justify-between items-center">
+                      <h2 className="font-bold text-lg text-slate-800 capitalize">{monthData.label}</h2>
+                      <span className="text-xs font-semibold bg-white border border-slate-200 px-3 py-1 rounded-full text-slate-600 shadow-sm">
+                        {monthData.totalSessions} Sesiones
+                      </span>
+                    </div>
+                    
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse">
+                        <thead>
+                          <tr className="bg-white text-xs uppercase tracking-wider text-slate-500 border-b border-slate-100">
+                            <th className="px-6 py-4 font-semibold">Alumno</th>
+                            <th className="px-6 py-4 font-semibold text-center text-emerald-600">Asistencias</th>
+                            <th className="px-6 py-4 font-semibold text-center text-red-500">Faltas</th>
+                            <th className="px-6 py-4 font-semibold text-right">% Asistencia</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-50">
+                          {Object.values(monthData.studentRecords).map((record) => {
+                            const hasNoPresents = record.present === 0;
+                            return (
+                              <tr 
+                                key={record.student.id} 
+                                className={`transition-colors ${
+                                  hasNoPresents 
+                                    ? 'bg-red-50/60 hover:bg-red-100/50' 
+                                    : 'hover:bg-slate-50'
+                                }`}
+                              >
+                                <td className="px-6 py-4 font-medium text-slate-800 whitespace-nowrap">
+                                  <div className="flex items-center gap-2">
+                                    {hasNoPresents && (
+                                      <AlertTriangle size={16} className="text-red-500 shrink-0" title="Sin sesiones registradas este mes" />
+                                    )}
+                                    <span className={hasNoPresents ? 'text-red-900 font-semibold' : ''}>
+                                      {record.student.name}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 text-center">
+                                  <span className={`inline-flex items-center gap-1 font-semibold ${
+                                    hasNoPresents ? 'text-red-500 font-bold' : 'text-emerald-600'
+                                  }`}>
+                                    <CheckCircle2 size={16} /> {record.present}
+                                  </span>
+                                </td>
+                                <td className="px-6 py-4 text-center">
+                                  <span className={`inline-flex items-center gap-1 font-semibold ${record.absent > 0 ? 'text-red-500' : 'text-slate-300'}`}>
+                                    <XCircle size={16} /> {record.absent}
+                                  </span>
+                                </td>
+                                <td className="px-6 py-4 text-right">
+                                  <span className={`inline-block px-2.5 py-1 rounded text-xs font-bold ${
+                                    hasNoPresents ? 'bg-red-200 text-red-800 border border-red-300' :
+                                    record.percentage >= 80 ? 'bg-emerald-100 text-emerald-700' : 
+                                    record.percentage >= 50 ? 'bg-yellow-100 text-yellow-700' : 
+                                    'bg-red-100 text-red-700'
+                                  }`}>
+                                    {hasNoPresents ? '0% (Sin asistencias)' : `${record.percentage}%`}
+                                  </span>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {teacherTab === 'students' && (
+              <div className="space-y-6">
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                  <h2 className="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <UserPlus size={20} className="text-emerald-500" /> Registrar Nuevo Alumno
+                  </h2>
+                  <form onSubmit={handleAddStudent} className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex-1">
+                      <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Nombre y Apellidos</label>
+                      <input 
+                        type="text" 
+                        name="name"
+                        required
+                        placeholder="Ej. Juan Pérez"
+                        className="w-full p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
+                      />
+                    </div>
+                    <div className="flex items-end">
+                      <button type="submit" className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors">
+                        Registrar
+                      </button>
+                    </div>
+                  </form>
+                </div>
+
+                <div className="mt-8 mb-4 flex items-center justify-between">
+                  <h3 className="font-bold text-slate-700">Listado de Alumnado</h3>
+                  <span className="bg-emerald-100 text-emerald-700 py-1 px-3 rounded-full text-xs font-bold border border-emerald-200 shadow-sm">
+                    Total: {students.length}
+                  </span>
+                </div>
+                <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="bg-slate-50 text-xs uppercase tracking-wider text-slate-500 border-b border-slate-100">
+                          <th className="px-6 py-4 font-semibold">Nombre y Apellidos</th>
+                          <th className="px-6 py-4 font-semibold text-center">Estado / Asistencia</th>
+                          <th className="px-6 py-4 font-semibold text-right">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-50">
+                        {students.map(student => {
+                          const studentPresents = sessions.filter(session => attendances[session.id]?.[student.id] === 'present').length;
+                          const totalSessionsCount = sessions.length;
+                          const isNotAttending = totalSessionsCount > 0 && studentPresents === 0;
+                          const hasLowAttendance = totalSessionsCount > 0 && !isNotAttending && (studentPresents / totalSessionsCount) < 0.5;
+
+                          return (
+                            <tr key={student.id} className="hover:bg-slate-50 transition-colors">
+                              <td className="px-6 py-4 font-medium text-slate-800 whitespace-nowrap">
+                                {student.name}
+                              </td>
+                              <td className="px-6 py-4 text-center whitespace-nowrap">
+                                {totalSessionsCount === 0 ? (
+                                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500 border border-slate-200">
+                                    Sin sesiones
+                                  </span>
+                                ) : isNotAttending ? (
+                                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 border border-red-200">
+                                    <AlertTriangle size={14} className="text-red-600" />
+                                    No asiste a clase (0%)
+                                  </span>
+                                ) : hasLowAttendance ? (
+                                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                                    <AlertTriangle size={14} className="text-amber-600" />
+                                    Asistencia baja ({studentPresents}/{totalSessionsCount})
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700 border border-emerald-200">
+                                    <CheckCircle2 size={14} className="text-emerald-600" />
+                                    Asiste ({studentPresents}/{totalSessionsCount})
+                                  </span>
+                                )}
+                              </td>
+                              <td className="px-6 py-4 text-right whitespace-nowrap">
+                                <button
+                                  onClick={() => setStudentToDelete(student)}
+                                  className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                  title="Eliminar alumno"
+                                >
+                                  <Trash2 size={18} />
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            )}
+          </main>
+
+          {studentToDelete && (
+            <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
+              <div className="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl border border-slate-100">
+                <h3 className="text-lg font-bold text-slate-800 mb-2">Eliminar Alumno</h3>
+                <p className="text-sm text-slate-600 mb-6">
+                  ¿Estás seguro de que deseas eliminar a <span className="font-semibold text-slate-800">{studentToDelete.name}</span>? Esta acción no se puede deshacer.
+                </p>
+                <div className="flex gap-3 justify-end">
+                  <button
+                    onClick={() => setStudentToDelete(null)}
+                    className="px-4 py-2 text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    onClick={() => handleDeleteStudent(studentToDelete.id)}
+                    className="px-4 py-2 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {toastMessage && (
+            <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-lg z-50 flex items-center gap-2">
+              <CheckCircle2 size={20} className="text-emerald-400" />
+              <span className="font-medium text-sm">{toastMessage}</span>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<AsistenciaApp />);
+  </script>
+</body>
+</html>
